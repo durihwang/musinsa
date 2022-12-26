@@ -1,4 +1,4 @@
 rootProject.name = 'musinsa'
-include 'application'
-include 'domain'
+include ':application'
+include ':domain'
 
