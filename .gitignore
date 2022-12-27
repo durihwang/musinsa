@@ -1,1 +1,6 @@
 /.idea/
+/.gradle/7.4/fileHashes/resourceHashesCache.bin
+/application/out/production/classes/org/musinsa/application/Application.class
+/application/out/production/resources/application.yml
+/domain/out/production/classes/org/musinsa/domain/entity/Product.class
+/domain/out/production/resources/application-domain.yml
