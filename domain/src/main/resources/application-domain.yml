@@ -1,6 +1,60 @@
+---
 spring:
+  config:
+    activate:
+      on-profile: local
   datasource:
-    url: jdbc:mysql://localhost:3306
+    url: jdbc:mysql://localhost:3306/test?characterEncoding=utf8
     username: sa
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      # 모든 db에 sql 스크립트 실행
+      mode: always
+  jpa:
+    # schema 생성 후에 data.sql 실행
+    defer-datasource-initialization: true
+    hibernate:
+#      ddl-auto: create
+      use-new-id-generator-mappings: false
+    properties:
+      hibernate:
+#        show-sql: true
+        format_sql: true
+    open-in-view: false
+logging:
+  level:
+#    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+---
+---
+spring:
+  config:
+    activate:
+      on-profile: h2db
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;
+#    username: sa
+#    password: 1234
+    driver-class-name: org.h2.Driver
+  sql:
+    init:
+      # 모든 db에 sql 스크립트 실행
+      mode: always
+  jpa:
+    # schema 생성 후에 data.sql 실행
+    defer-datasource-initialization: true
+    hibernate:
+#      ddl-auto: create
+      use-new-id-generator-mappings: false
+    properties:
+      hibernate:
+        #        show-sql: true
+        format_sql: true
+    open-in-view: false
+logging:
+  level:
+    #    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+---
