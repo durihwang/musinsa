@@ -1,4 +1,12 @@
 buildscript {
+    bootJar {
+        enabled = false
+    }
+
+    jar {
+        enabled = true
+    }
+
     ext {
         queryDslVersion = "5.0.0"
     }
