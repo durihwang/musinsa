@@ -19,10 +19,10 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping(value = "/product")
+    @GetMapping(value = "/product/{productName}/{optionName}")
     public FindProductResponseDto findProduct(
-        @RequestParam String productName,
-        @RequestParam String optionName) {
+        @PathVariable String productName,
+        @PathVariable String optionName) {
 
         ResponseDto<FindProductResponseDto> productDto = productService.getProduct(productName,
             optionName);
