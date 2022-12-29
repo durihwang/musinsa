@@ -3,6 +3,8 @@ package org.musinsa.application.service;
 import lombok.RequiredArgsConstructor;
 import org.musinsa.application.dto.FindProductResponseDto;
 import org.musinsa.application.dto.ResponseDto;
+import org.musinsa.application.exception.NotExistProductNameException;
+import org.musinsa.domain.entity.Product;
 import org.musinsa.domain.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ResponseDto<FindProductResponseDto> getProduct(String productName, String optionName) {
 
-        return null;
+        Product product = productRepository.findByProductNameAndOptionName("prd-a", "opt-aa")
+            .orElseThrow(NotExistProductNameException::new);
+
+        FindProductResponseDto findProductResponseDto = FindProductResponseDto.createDtoFromEntity(
+            product);
+
+        return new ResponseDto<>(findProductResponseDto);
     }
 }
