@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
 public enum ApplicationErrorCode {
 
     NOT_EXIST_PRODUCT_NAME("E-0001", "존재하지 않는 상품입니다.", HttpStatus.BAD_REQUEST),
-    NOT_EXIST_PRODUCT_OPTION("E-0001", "존재하지 않는 옵션입니다.", HttpStatus.BAD_REQUEST);
+    NOT_EXIST_PRODUCT_OPTION("E-0001", "존재하지 않는 옵션입니다.", HttpStatus.BAD_REQUEST),
+    VALID_EXCEPTION("V-0001", "파라미터 오류", HttpStatus.BAD_REQUEST);
 
     private final String errorCode;
 

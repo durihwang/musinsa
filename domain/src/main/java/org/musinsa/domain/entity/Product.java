@@ -1,7 +1,6 @@
 package org.musinsa.domain.entity;
 
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import lombok.AccessLevel;
@@ -11,8 +10,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
 
     @Id

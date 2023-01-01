@@ -1,5 +1,6 @@
 package org.musinsa.application.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.musinsa.application.dto.FindProductResponseDto;
 import org.musinsa.application.dto.ResponseDto;
@@ -15,14 +16,20 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     @Override
-    public ResponseDto<FindProductResponseDto> getProduct(String productName, String optionName) {
+    public ResponseDto<List<FindProductResponseDto>> getProduct(String productName,
+        String optionName) {
 
-        Product product = productRepository.findByProductNameAndOptionName("prd-a", "opt-aa")
+        List<Product> productList = productRepository.findByProductNameAndOptionName(productName,
+                optionName)
             .orElseThrow(NotExistProductNameException::new);
 
-        FindProductResponseDto findProductResponseDto = FindProductResponseDto.createDtoFromEntity(
-            product);
+        if (productList.isEmpty()) {
+            throw new NotExistProductNameException();
+        }
 
-        return new ResponseDto<>(findProductResponseDto);
+        List<FindProductResponseDto> findProductResponseDtoList = FindProductResponseDto.createListFromEntityList(
+            productList);
+
+        return new ResponseDto<>(findProductResponseDtoList);
     }
 }
