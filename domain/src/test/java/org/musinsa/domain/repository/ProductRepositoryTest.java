@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.assertj.core.api.Assertions;
@@ -26,9 +27,8 @@ class ProductRepositoryTest {
 
     @Test
     void findProductTest() {
-        Product product = productRepository.findByProductNameAndOptionName("prd-a", "opt-aa")
-            .orElseThrow();
+        Product products = productRepository.findByProductNameAndOptionNameOne("prd-a", "opt-aa");
 
-        assertThat(product.getProductName()).isEqualTo("prd-a");
+        assertThat(products.getProductName()).isEqualTo("prd-a");
     }
 }

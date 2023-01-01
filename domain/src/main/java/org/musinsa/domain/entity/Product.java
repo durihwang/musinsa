@@ -1,15 +1,17 @@
 package org.musinsa.domain.entity;
 
 
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 public class Product {
 
     @Id
@@ -20,4 +22,13 @@ public class Product {
     private String optionName;
 
     private int quantity;
+
+    public Product() {
+
+    }
+
+    public void changeQuantity(AtomicInteger atomicInteger) {
+        this.quantity = atomicInteger.get();
+    }
+
 }

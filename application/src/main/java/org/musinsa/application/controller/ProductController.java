@@ -3,10 +3,10 @@ package org.musinsa.application.controller;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.musinsa.application.dto.FindProductRequestDto;
 import org.musinsa.application.dto.FindProductResponseDto;
 import org.musinsa.application.dto.ResponseDto;
 import org.musinsa.application.dto.UpdateProductRequestDto;
+import org.musinsa.application.dto.UpdateProductResponseDto;
 import org.musinsa.application.service.ProductService;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,12 +32,14 @@ public class ProductController {
     }
 
     @PutMapping(value = "/product/increase")
-    public void increaseProduct(@RequestBody @Valid UpdateProductRequestDto updateProductRequestDto) {
-
+    public ResponseDto<UpdateProductResponseDto> increaseProduct(
+        @RequestBody @Valid UpdateProductRequestDto updateProductRequestDto) {
+        return productService.increaseProduct(updateProductRequestDto);
     }
 
     @PutMapping(value = "/product/decrease")
-    public void decreaseProduct(@RequestBody @Valid UpdateProductRequestDto updateProductRequestDto) {
-
+    public ResponseDto<UpdateProductResponseDto> decreaseProduct(
+        @RequestBody @Valid UpdateProductRequestDto updateProductRequestDto) {
+        return productService.decreaseProduct(updateProductRequestDto);
     }
 }
