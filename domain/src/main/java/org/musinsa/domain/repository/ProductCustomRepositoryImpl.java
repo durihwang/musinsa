@@ -4,15 +4,14 @@ import static org.musinsa.domain.entity.QProduct.product;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.querydsl.jpa.impl.JPAUpdateClause;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import lombok.extern.slf4j.Slf4j;
 import org.musinsa.domain.entity.Product;
-import org.musinsa.domain.entity.QProduct;
 import org.springframework.data.jpa.repository.Lock;
-import org.springframework.util.StringUtils;
 
 @Slf4j
 public class ProductCustomRepositoryImpl implements ProductCustomRepository {
@@ -32,6 +31,15 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
                 .where(product.productName.eq(productName), eqOptionName(optionName))
                 .fetch()
         );
+    }
+
+    @Override
+    public JPAUpdateClause updateProductByProductNameAndOptionName(String productName, String optionName, int quantity) {
+        return jpaQueryFactory
+            .update(product)
+            .set(product.quantity, quantity)
+            .where(product.productName.eq(productName))
+            .where(product.optionName.eq(optionName));
     }
 
     /*@Override

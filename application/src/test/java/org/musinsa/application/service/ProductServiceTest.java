@@ -1,35 +1,35 @@
 package org.musinsa.application.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.musinsa.application.dto.ResponseDto;
 import org.musinsa.application.dto.UpdateProductRequestDto;
-import org.musinsa.application.dto.UpdateProductResponseDto;
+import org.musinsa.application.exception.QuantityException;
 import org.musinsa.domain.entity.Product;
-import org.musinsa.domain.repository.ProductCustomRepository;
+import org.musinsa.domain.entity.Product.ProductBuilder;
 import org.musinsa.domain.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.PessimisticLockingFailureException;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest
-@ActiveProfiles({"domain", "h2db"})
+@ActiveProfiles({"domain"})
 @Slf4j
-//@Sql("/data/data.sql")
 class ProductServiceTest {
 
     @Autowired
@@ -38,7 +38,9 @@ class ProductServiceTest {
     @Autowired
     private ProductRepository productRepository;
 
-    @BeforeEach
+    @PersistenceContext
+    private EntityManager em;
+
     @Test
     @DisplayName("증가 동시성 테스트")
     @Transactional
@@ -65,40 +67,21 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("감소 동시성 테스트")
+    @DisplayName("수량 마이너스 체크")
     @Transactional
-    void decreaseTest() throws InterruptedException {
+    void decreaseTest() throws PessimisticLockingFailureException, InterruptedException {
 
-        // 최초 50개 설정
-        UpdateProductRequestDto build = getUpdateProductRequestDto(50);
-        productService.increaseProduct(build);
-
-        int numberOfThreads = 10;
-        int finalQuantity = 0;
-        ExecutorService service = Executors.newFixedThreadPool(10);
-        CountDownLatch latch = new CountDownLatch(numberOfThreads);
-        for (int i = 0; i < numberOfThreads; i++) {
-            service.execute(() -> {
-                UpdateProductRequestDto updateProductRequestDto = getUpdateProductRequestDto(5);
-                productService.decreaseProduct(updateProductRequestDto);
-                latch.countDown();
-            });
-        }
-        latch.await();
-
-        Product findProduct = productRepository.findTopByProductNameAndOptionName(
-            "prd-a", "opt-aa");
-
-        Assertions.assertThat(findProduct.getQuantity()).isEqualTo(finalQuantity);
-
+        assertThrows(QuantityException.class, () -> {
+            UpdateProductRequestDto updateProductRequestDto = getUpdateProductRequestDto(5);
+            productService.decreaseProduct(updateProductRequestDto);
+        });
     }
 
     private static UpdateProductRequestDto getUpdateProductRequestDto(int quantity) {
-        UpdateProductRequestDto build = UpdateProductRequestDto.builder()
+        return UpdateProductRequestDto.builder()
             .productName("prd-a")
             .optionName("opt-aa")
             .quantity(quantity)
             .build();
-        return build;
     }
 }

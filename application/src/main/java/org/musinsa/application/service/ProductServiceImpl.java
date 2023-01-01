@@ -3,6 +3,7 @@ package org.musinsa.application.service;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.musinsa.application.dto.FindProductResponseDto;
 import org.musinsa.application.dto.ResponseDto;
 import org.musinsa.application.dto.UpdateProductRequestDto;
@@ -12,9 +13,11 @@ import org.musinsa.application.exception.QuantityException;
 import org.musinsa.domain.entity.Product;
 import org.musinsa.domain.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
@@ -57,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Transactional
+    @Transactional()
     public ResponseDto<UpdateProductResponseDto> decreaseProduct(
         UpdateProductRequestDto updateProductRequestDto) {
 
@@ -67,6 +70,9 @@ public class ProductServiceImpl implements ProductService {
 
         AtomicInteger atomicInteger = new AtomicInteger(
             findProduct.getQuantity() - updateProductRequestDto.getQuantity());
+
+        log.info(String.valueOf(findProduct.getQuantity()));
+        log.info(String.valueOf(updateProductRequestDto.getQuantity()));
 
         if (atomicInteger.get() < 0) {
             throw new QuantityException();
