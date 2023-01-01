@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +28,8 @@ class ProductRepositoryTest {
 
     @Test
     void findProductTest() {
-        Product products = productRepository.findTopByProductNameAndOptionName("prd-a", "opt-aa");
+        Product products = productRepository.findTopByProductNameAndOptionName("prd-a", "opt-aa").orElseThrow(
+            NoResultException::new);
 
         assertThat(products.getProductName()).isEqualTo("prd-a");
     }

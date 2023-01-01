@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.musinsa.application.dto.UpdateProductRequestDto;
+import org.musinsa.application.exception.NotExistProductNameException;
 import org.musinsa.application.exception.QuantityException;
 import org.musinsa.domain.entity.Product;
 import org.musinsa.domain.entity.Product.ProductBuilder;
@@ -60,7 +61,7 @@ class ProductServiceTest {
         latch.await();
 
         Product findProduct = productRepository.findTopByProductNameAndOptionName(
-            "prd-a", "opt-aa");
+            "prd-a", "opt-aa").orElseThrow(NotExistProductNameException::new);
 
         Assertions.assertThat(findProduct.getQuantity()).isEqualTo(finalQuantity);
 

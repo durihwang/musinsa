@@ -49,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
 
         Product findProduct = productRepository.findTopByProductNameAndOptionName(
             updateProductRequestDto.getProductName(),
-            updateProductRequestDto.getOptionName());
+            updateProductRequestDto.getOptionName()).orElseThrow(NotExistProductNameException::new);
 
         AtomicInteger atomicInteger = new AtomicInteger(
             findProduct.getQuantity() + updateProductRequestDto.getQuantity());
@@ -66,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
 
         Product findProduct = productRepository.findTopByProductNameAndOptionName(
             updateProductRequestDto.getProductName(),
-            updateProductRequestDto.getOptionName());
+            updateProductRequestDto.getOptionName()).orElseThrow(NotExistProductNameException::new);
 
         AtomicInteger atomicInteger = new AtomicInteger(
             findProduct.getQuantity() - updateProductRequestDto.getQuantity());

@@ -12,6 +12,6 @@ import org.springframework.data.jpa.repository.Lock;
 public interface ProductRepository extends JpaRepository<Product, Long>, ProductCustomRepository {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    Product findTopByProductNameAndOptionName(String productName, String optionName);
+    Optional<Product> findTopByProductNameAndOptionName(String productName, String optionName);
 
 }
