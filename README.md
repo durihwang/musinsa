@@ -12,6 +12,11 @@
 java -jar ./application/build/libs/application-1.0-SNAPSHOT.jar
 ```
 
+## 테스트
+```shell
+./gradlew test
+```
+
 # API
 
 ## 재고 현황 조회 API
@@ -66,10 +71,52 @@ Content-Length: 44
 ```
 ## 재고 증가 처리 API
 ### REQUEST
+```shell
+PUT /product/increase HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Content-Length: 82
+
+{
+    "productName": "prd-a",
+    "optionName": "opt-aa",
+    "quantity": 5
+    
+}
+```
 
 ### RESPONSE
-
+```
+{
+    "data": {
+        "productName": "prd-a",
+        "optionName": "opt-aa",
+        "quantity": 55
+    }
+}
+```
 ## 재고 차감 처리 API
 ### REQUEST
+```shell
+PUT /product/decrease HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Content-Length: 82
 
+{
+    "productName": "prd-a",
+    "optionName": "opt-aa",
+    "quantity": 5
+    
+}
+```
 ### RESPONSE
+```
+{
+    "data": {
+        "productName": "prd-a",
+        "optionName": "opt-aa",
+        "quantity": 55
+    }
+}
+```

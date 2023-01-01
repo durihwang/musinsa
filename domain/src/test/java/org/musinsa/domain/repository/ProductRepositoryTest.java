@@ -17,7 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest
-//@Sql("/data/data.sql")
+@Sql("/data/data.sql")
 @ActiveProfiles({"domain", "h2db"})
 class ProductRepositoryTest {
 
@@ -27,7 +27,7 @@ class ProductRepositoryTest {
 
     @Test
     void findProductTest() {
-        Product products = productRepository.findByProductNameAndOptionNameOne("prd-a", "opt-aa");
+        Product products = productRepository.findTopByProductNameAndOptionName("prd-a", "opt-aa");
 
         assertThat(products.getProductName()).isEqualTo("prd-a");
     }
